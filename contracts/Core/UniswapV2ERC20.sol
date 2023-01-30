@@ -89,7 +89,7 @@ abstract contract UniswapV2ERC20 is IUniswapV2ERC20 {
         //         value
         //     );
         // }
-    require(allowance[from][msg.sender] >= value, "Insufficient balance");
+    require(allowance[from][msg.sender] >= value, "Insufficient allowance balance");
 
     _transfer(from, to, value);
     return true;
@@ -108,10 +108,7 @@ abstract contract UniswapV2ERC20 is IUniswapV2ERC20 {
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR,keccak256(abi.encode(PERMIT_TYPEHASH,owner,spender,value,nonces[owner]++,deadline))));
         
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(
-            recoveredAddress != address(0) && recoveredAddress == owner,
-            "UniswapV2: INVALID_SIGNATURE"
-        );
+        require(recoveredAddress != address(0) && recoveredAddress == owner,"UniswapV2: INVALID_SIGNATURE");
         _approve(owner, spender, value);
     }
 }
