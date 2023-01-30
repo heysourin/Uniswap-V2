@@ -5,10 +5,10 @@ import "./interfaces/IUniswapV2Factory.sol";
 import "./UniswapV2Pair.sol";
 
 contract UniswapV2Factory is IUniswapV2Factory {
-    address public feeTo;
-    address public feeToSetter;
+    address public feeTo;//Receives fees (0.3%) when turned on(ie when not addres(0))
+    address public feeToSetter;// owner or admin
 
-    mapping(address => mapping(address => address)) public getPair;
+    mapping(address => mapping(address => address)) public getPair;// tracks all the pairs, created
 
     address[] public allPairs;
 
