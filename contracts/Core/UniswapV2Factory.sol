@@ -48,6 +48,8 @@ contract UniswapV2Factory is IUniswapV2Factory {
         feeTo = _feeTo;
     }
 
+
+//To change contract ownership, only owner has the access
     function setFeeToSetter(address _feeToSetter) external {
         require(msg.sender == feeToSetter, "UniswapV2: FORBIDDEN");
         feeToSetter = _feeToSetter;
