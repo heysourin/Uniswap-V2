@@ -44,7 +44,7 @@ contract UniswapV2Factory is IUniswapV2Factory {
     }
 
     function setFeeTo(address _feeTo) external {
-        require(msg.sender == feeToSetter, "UniswapV2: FORBIDDEN");
+        require(msg.sender == feeToSetter, "UniswapV2: FORBIDDEN");//Only  the contract owner can set where the fees will go
         feeTo = _feeTo;
     }
 
