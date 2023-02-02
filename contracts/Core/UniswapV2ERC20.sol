@@ -21,29 +21,17 @@ abstract contract UniswapV2ERC20 is IUniswapV2ERC20 {
         0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
     mapping(address => uint256) public nonces;
 
-    event Approval(
-        address indexed owner,
-        address indexed spender,
-        uint256 value
-    );
+    event Approval(address indexed owner, address indexed spender,uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
 
+
+    //TODO: Constructor sets the DOMAIN_SEPARATOR only
     constructor() {
         uint256 chainId;
         assembly {
             chainId := chainid() //! ****IMP**** : returns the chainId of deployed network
         }
-        DOMAIN_SEPARATOR = keccak256(
-            abi.encode(
-                keccak256(
-                    "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
-                ),
-                keccak256(bytes(name)),
-                keccak256(bytes("1")),
-                chainId,
-                address(this)
-            )
-        );
+        DOMAIN_SEPARATOR = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),keccak256(bytes(name)),keccak256(bytes("1")),chainId,address(this)));
     }
 
     function _mint(address to, uint256 value) internal {
@@ -79,31 +67,19 @@ abstract contract UniswapV2ERC20 is IUniswapV2ERC20 {
         return true;
     }
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 value
-    ) external returns (bool) {
+    function transferFrom(address from,address to,uint256 value) external returns (bool) {
         // if (allowance[from][msg.sender] != int256(-1)) {
         //     allowance[from][msg.sender] = allowance[from][msg.sender].sub(
         //         value
         //     );
         // }
-    require(allowance[from][msg.sender] >= value, "Insufficient allowance balance");
+        require(allowance[from][msg.sender] >= value, "Insufficient allowance balance");
 
-    _transfer(from, to, value);
-    return true;
+        _transfer(from, to, value);
+        return true;
     }
 
-    function permit(
-        address owner,
-        address spender,
-        uint256 value,
-        uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external {
+    function permit(address owner,address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r,bytes32 s) external {
         require(deadline >= block.timestamp, "UniswapV2: EXPIRED");
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR,keccak256(abi.encode(PERMIT_TYPEHASH,owner,spender,value,nonces[owner]++,deadline))));
         
